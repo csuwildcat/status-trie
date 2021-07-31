@@ -30,7 +30,7 @@ Like other schemes, this mechanism enables status flags to be expressed for a la
 
 The following are the relevant phases of the scheme, broken out into the major steps involved in generating entries, requesting status for entries, and processing/validation of the trie by Verifiers:
 
-### Entry Generation
+### Status Entry Generation
 
 The following process is used for generating an entry in the trie that corresponds to a credential status indication:
 
@@ -49,7 +49,7 @@ The following process is used for generating an entry in the trie that correspon
     "id": "https://dmv.example.gov/credentials/status/0918273645",
     "type": "StatusTrie2021",
     "statusEntryId": "b3xce8b904295b3e226c4127718f3b15aa3280261f223df2e718d9a04dea7ab4",
-    "statusTrieUrl": "did:ion:123?service=IdentityHub/Query?id=a2038cddfbb8e..."
+    "statusTrieUrl": "did:ion:123?service=IdentityHub&relativeRef=/Query?id=a2038cddfbb8e..."
   },
   "credentialSubject": { ... },
   "proof": { ... }
@@ -154,9 +154,20 @@ const exampleTrie = assembleTrie(testEntries);
 
 ### Relying Party Validation
 
-Upon receiving a status list response from the Issuer, use the following process to check the status of a target entry:
-  1. 
-  
+Upon receiving retrieval of a Status Trie from a `statusTrieUrl`, use the following process to check the status of a target entry:
+
+1. Create a *Current Tree* variable with the initial value set to the Status Trie root.
+2. Begin iterating the characters of the `statusEntryId` for entry being checked, and for each character performing the following steps:
+  1. Lookup the character in the *Current Tree* and retain a reference to the value.
+  2. Determine the value's type, and retain a reference to the type. 
+  3. If the type is an `object`, set the *Current Tree* to the value and skip Step 4, allowing the loop to proceed to the next character.
+  4. If the type is anything other than `object`, return the value, breaking out of the loop.
+3. Let the status be the value from the looping evaluation returned from Step 2. The status value MUST be either `undefined` or one of the status codes in the [Status Codes](#status-codes) section of this document, else the implementation should produce an error.
+
+::: note
+If a custom status code is desired, the implementer MUST prefix the status value with a Hyphen-Minus `-`. For reference, the Hyphen-Minus UTF-8 encoding is `0x2D` and the HTML entity representation is `&#45;`
+:::
+
 #### Implementation Example
 
 ::: example
@@ -184,3 +195,12 @@ const xyzStatus = getStatusFromTrie('xyz', exampleTrie)
 // returns undefined
 ```
 :::
+
+## Status Codes
+
+
+Code       | Status      | Description
+:--------: | :---------- | ------------
+`undefined`| NONE     | Indicates there is no additional status information to communicate about the entry. |
+0          | Revoked     | Indicates an entry representing an attested set of claims or entitlements (e.g. Verifiable Credentials) has been revoked by the status publishing entity (e.g. Issuer). |
+1          | Suspended   | Indicates an entry representing an attested set of claims or entitlements (e.g. Verifiable Credentials) has been suspended by the status publishing entity (e.g. Issuer). |
