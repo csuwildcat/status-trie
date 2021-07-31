@@ -156,10 +156,7 @@ const exampleTrie = assembleTrie(testEntries);
 
 Upon receiving a status list response from the Issuer, use the following process to check the status of a target entry:
   1. 
-
-
-
-
+  
 #### Implementation Example
 
 ::: example
