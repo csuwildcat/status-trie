@@ -189,9 +189,9 @@ Continuing with the example from the [Status Trie Assembly](#status-trie-assembl
 
 ::: example
 ```javascript
-const abxStatus = getStatusFromTrie('abx', exampleTrie)
-// returns 2
-const xyzStatus = getStatusFromTrie('xyz', exampleTrie)
+const abxStatus = getStatusFromTrie('abx0cc05da728dd30c59bec09a919b11b7ce8de10a5bb571f82c3bd3abfa49e3', exampleTrie)
+// returns 0
+const xyzStatus = getStatusFromTrie('xyz5795b7d30c59bec0715c49de10a5bb578693d0509ef33d39435795b7cce74', exampleTrie)
 // returns undefined
 ```
 :::
