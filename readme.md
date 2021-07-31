@@ -1,5 +1,5 @@
-# Hashfield Status List
+# Status Trie
 
-Privacy-preserving status lists via inferential indexes in a deterministically shuffled bitfield
+Privacy-preserving status publication via truncated, collision-filtered identifiers distributed over a trie structure.
 
-Spec: https://csuwildcat.github.io/hashfield
+Spec: https://csuwildcat.github.io/status-trie
