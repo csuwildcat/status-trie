@@ -124,11 +124,11 @@ Would be truncated to the minium leading length required for non-colliding distr
 
 ```javascript
 let testEntries = [
-  { key: 'abx', value: 0 },
-  { key: 'acd', value: 2 },
-  { key: 'ace', value: 1 },
-  { key: 'fgh', value: 1 },
-  { key: 'fgi', value: 0 }
+  { key: 'abx0cc05da728dd30c59bec09a919b11b7ce8de10a5bb571f82c3bd3abfa49e3', value: 0 },
+  { key: 'acde7532c5d699ad6619c41bf76cbe571cab54b343842aa9e89464319289016d', value: 2 },
+  { key: 'acecfd46dd5be0b3dc92790231a162b9634efc36da7579583010c9cd061b692c', value: 1 },
+  { key: 'fghc13cea8b85180577bf52fe55adb9042c836b1e63eca1e6f2eee9b63e506fd', value: 1 },
+  { key: 'fgic6ec856d9e715c498693d0509ef33d39435795b7cce74f9182b9012d66df3', value: 0 }
 }
 
 const exampleTrie = assembleTrie(testEntries);
