@@ -2,7 +2,7 @@
   "specs": [
     {
       "title": "Status Trie",
-      "logo": "/assets/icons/tree.png",
+      "logo": "./assets/icons/tree.png",
       "spec_directory": "./spec",
       "output_path": "./",
       "source": {
