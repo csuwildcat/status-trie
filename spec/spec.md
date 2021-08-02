@@ -72,14 +72,17 @@ To generate a status trie JSON representation, use the following process:
 
 1. Let the containing trie be represented as a JSON object.
 2. Let there be an *Iteration Counter*, set to 0.
-3. Iterate over each entry to be included in the Status Trie, performing the following steps:
+3. Gather a list of all assigned items that may have a status reflected in the generated trie (e.g. the status entry IDs of all credentials that were ever assigned to the a given trie ID). NOTE: be sure to include all items that are assigned to the target status trie, even if the items are not to be included in the generated trie with a status value.
+4. Iterate over each entry in the list of items, performing the following steps:
     1. Create a *Current Tree* reference for the entry, with a value set to either the *Previous Tree* from the previous iteration loop or the root of the trie.
-    2. If the *Current Tree* object indicates the object should be closed to further node distribution, replace the property that holds the *Current Tree* object (e.g. via previous ancestor reference) with the desired status value and remove the entry from the list. If the *Current Tree* object indicates the object should remain open for distribution of further nodes, skip this step. 
+    2. If the *Current Tree* object indicates the object should remain open for distribution of further nodes, skip this step. If the *Current Tree* object indicates the object should be closed to further node distribution, proceed as follows:
+        - If the entry *is* to be included in the trie, replace the property that holds the *Current Tree* object with the desired status value and remove the entry from the list.
+        - If the entry *is not* to be included in the trie (e.g. there is no status information to convey about an entry), delete the property that is holding the *Current Tree* object and remove the entry from the list.
     3. Create a *Current Character* reference that is the string value of the character at the index position of the entry ID corresponding with the *Iteration Counter's* current value. If there is no character at the position in the entry's ID that corresponds with the *Iteration Counter's* current value, do not process any further steps for this entry.
     4. Retain a *Previous Tree* reference for this entry with a value set to the *Current Tree* object.
     5. If a property exists in the *Current Tree* object for the character at the index position of the entry ID corresponding with the *Iteration Counter's* current value, remove the reference indicating the property's object is open for distribution of further nodes. If no property exists in the *Current Tree* object for the character at the index position of the entry ID corresponding with the *Iteration Counter's* current value, create a property for the *Current Character* with an object as its value, retain a reference indicating the object is open for distribution of other nodes, and assign the newly created object as the value of the entry's *Current Tree*.
     6. Remove the entry from the list.
-4. If any items remain in the list, increment the counter and loop the list again using the process in Step 3.
+4. If any items remain in the list, increment the counter and loop the list again using the process in Step 4.
 
 #### Implementation Example
 
@@ -92,7 +95,8 @@ function assembleTrie(entries){
     entries = entries.filter(entry => {
       let branch = entry.branch || trie;
       if (branch.close) {
-        entry.ancestor[branch.close] = entry.value;
+        if (typeof entry.value !== 'number') delete entry.ancestor[branch.close];
+        else entry.ancestor[branch.close] = entry.value;
       }
       let char = entry.key[iteration];
       if (char) {

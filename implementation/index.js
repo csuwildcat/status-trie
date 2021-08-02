@@ -6,7 +6,8 @@ function assembleTrie(entries){
     entries = entries.filter(entry => {
       let branch = entry.branch || trie;
       if (branch.close) {
-        entry.ancestor[branch.close] = entry.value;
+        if (typeof entry.value !== 'number') delete entry.ancestor[branch.close];
+        else entry.ancestor[branch.close] = entry.value;
       }
       let char = entry.key[iteration];
       if (char) {
@@ -50,6 +51,7 @@ let testEntries = [
   { key: 'e1f44457ef3ca03d69cd1f8eedf45b0e4fd76fec124fc41215fb5b6588e645e1', value: 0 },
   { key: '343fe6f09c1bb4d5be1d2b54215d8a17f34f2e6921e47277ba41212f16cbbd51', value: 2 },
   { key: '27c4738cb446e92ae704fc723ef00c77353f9bf2efb28803bb6c794a4464b07b', value: 0 },
+  { key: '27c4730000000000000000000000000000000000000000000000000000000000', value: null },
 ]
 
 const exampleTrie = assembleTrie(testEntries);
