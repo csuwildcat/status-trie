@@ -48,7 +48,7 @@ The following process is used for generating an entry in the trie that correspon
   "credentialStatus": {
     "id": "https://dmv.example.gov/credentials/status/0918273645",
     "type": "StatusTrie2021",
-    "statusEntryId": "b3xce8b904295b3e226c4127718f3b15aa3280261f223df2e718d9a04dea7ab4",
+    "statusEntryId": "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c=",
     "statusTrieUrl": "did:ion:123?service=IdentityHub&relativeRef=/Query?id=a2038cddfbb8e..."
   },
   "credentialSubject": { ... },
