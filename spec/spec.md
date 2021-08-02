@@ -96,9 +96,9 @@ function assembleTrie(entries){
       }
       let char = entry.key[iteration];
       if (char) {
-        entry.ancestor = branch;
         branch[char] ? delete branch[char].close : branch[char] = { close: char };
         entry.branch = branch[char];
+        entry.ancestor = branch;
         return true;
       }
     });
@@ -176,12 +176,10 @@ function getStatusFromTrie(key, trie){
   let branch = trie;
   for (let char of key) {
     let value = branch[char];
-    let type = typeof value;
-    if (type === 'object') branch = value;
+    if (typeof value === 'object') branch = value;
     else return value;
   }
 }
-
 ```
 :::
 

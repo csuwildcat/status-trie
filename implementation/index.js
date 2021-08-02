@@ -1,4 +1,35 @@
 
+function assembleTrie(entries){
+  let trie = {};
+  let iteration = 0;
+  while (entries.length) {
+    entries = entries.filter(entry => {
+      let branch = entry.branch || trie;
+      if (branch.close) {
+        entry.ancestor[branch.close] = entry.value;
+      }
+      let char = entry.key[iteration];
+      if (char) {
+        branch[char] ? delete branch[char].close : branch[char] = { close: char };
+        entry.branch = branch[char];
+        entry.ancestor = branch;
+        return true;
+      }
+    });
+    ++iteration;
+  }
+  return trie;
+}
+
+function getStatusFromTrie(key, trie){
+  let branch = trie;
+  for (let char of key) {
+    let value = branch[char];
+    if (typeof value === 'object') branch = value;
+    else return value;
+  }
+}
+
 let testEntries = [
   { key: '4c80cc05da728dd30c59bec09a919b11b7ce8de10a5bb571f82c3bd3abfa49e3', value: 0 },
   { key: 'd46e7532c5d699ad6619c41bf76cbe571cab54b343842aa9e89464319289016d', value: 2 },
@@ -21,26 +52,7 @@ let testEntries = [
   { key: '27c4738cb446e92ae704fc723ef00c77353f9bf2efb28803bb6c794a4464b07b', value: 0 },
 ]
 
-function assembleTrie(entries){
-  let trie = {};
-  let iteration = 0;
-  while (entries.length) {
-    entries = entries.filter(entry => {
-      let branch = entry.branch || trie;
-      if (branch.close) {
-        entry.ancestor[branch.close] = entry.value;
-      }
-      let char = entry.key[iteration];
-      if (char) {
-        entry.ancestor = branch;
-        branch[char] ? delete branch[char].close : branch[char] = { close: char };
-        entry.branch = branch[char];
-        return true;
-      }
-    });
-    ++iteration;
-  }
-  return trie;
-}
+const exampleTrie = assembleTrie(testEntries);
 
-console.log(JSON.stringify(assembleTrie(testEntries), null, 2));
+console.log(JSON.stringify(exampleTrie, null, 2));
+console.log(getStatusFromTrie('4c80cc05da728dd30c59bec09a919b11b7ce8de10a5bb571f82c3bd3abfa49e3', exampleTrie));
